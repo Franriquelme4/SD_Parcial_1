@@ -25,22 +25,26 @@ public class Cliente {
 
     public static void main(String[] args) {
 
-        //puerto del servidor
+        // puerto del servidor
         final int PUERTO_SERVIDOR = 5000;
-        //buffer donde se almacenara los mensajes
+        // buffer donde se almacenara los mensajes
         byte[] buffer = null;
 
         try {
-            //Obtengo la localizacion de localhost
+            // Obtengo la localizacion de localhost
             InetAddress direccionServidor = InetAddress.getByName("localhost");
 
-            //Creo el socket de UDP
+            // Creo el socket de UDP
             DatagramSocket socketUDP = new DatagramSocket();
             int idEstacion = 1;
-            int idOperacion = 0; 
-            while (idOperacion!=3) {
+            int idOperacion = 0;
+            System.out.println("***************************************************************");
+            System.out.println("Francisco Riquelme 5156057 - 05/04/2001");
+            System.out.println("***************************************************************");
+            while (idOperacion != 3) {
                 Scanner lectura = new Scanner(System.in);
-                //Lo envio con send
+
+                // Lo envio con send
                 System.out.println("=========== Seleccionar un tipo de operacion ===========");
                 System.out.println("1) Recibir datos de sensores ");
                 System.out.println("2) Consultar la temperatura en una ciudad ");
@@ -79,13 +83,14 @@ public class Cliente {
 
                     String mensaje = new Gson().toJson(request);
                     buffer = mensaje.getBytes();
-                    //Creo un datagrama
-                    DatagramPacket pregunta = new DatagramPacket(buffer, buffer.length, direccionServidor, PUERTO_SERVIDOR);
+                    // Creo un datagrama
+                    DatagramPacket pregunta = new DatagramPacket(buffer, buffer.length, direccionServidor,
+                            PUERTO_SERVIDOR);
                     socketUDP.send(pregunta);
                     buffer = new byte[2048];
-                    //Preparo la respuesta
+                    // Preparo la respuesta
                     DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
-                    //Recibo la respuesta
+                    // Recibo la respuesta
                     socketUDP.receive(peticion);
                     mensaje = new String(peticion.getData());
                     int index = 0;
@@ -98,7 +103,7 @@ public class Cliente {
                     }
                     String nuevoMensaje = mensaje.substring(0, index);
                     System.out.println(nuevoMensaje);
-                    //cierro el socket
+                    // cierro el socket
                     idEstacion++;
                 }
             }

@@ -33,7 +33,11 @@ public class Servidor {
             //Creacion del socket
             DatagramSocket socketUDP = new DatagramSocket(PUERTO);
             //Siempre atendera peticiones
+            System.out.println("***************************************************************");
+            System.out.println("Francisco Riquelme 5156057 - 05/04/2001");
+            System.out.println("***************************************************************");
             while (true) {
+
                 buffer = new byte[2048];
                 //Preparo la respuesta
                 DatagramPacket peticion = new DatagramPacket(buffer, buffer.length);
@@ -51,6 +55,8 @@ public class Servidor {
                     }
                 }
                 String nuevoMensaje = mensaje.substring(0, index);
+                System.out.println("Peticion de cliente");
+                System.out.println(nuevoMensaje);
                 Map response = new Gson().fromJson(nuevoMensaje, Map.class);
                 int idOperacion = Double.valueOf(response.get("idOperacion").toString()).intValue();
                 Map responseData = (Map) response.get("data");
@@ -63,15 +69,15 @@ public class Servidor {
                 } else if (idOperacion == 2) {
                     String ciudad = data.getCiudad();
                     List<Data> ciudadesDato = new ArrayList<>();
-                    for(Data x : datosMeteo){
-                        if(x.getCiudad().equals(ciudad)){
+                    for (Data x : datosMeteo) {
+                        if (x.getCiudad().equals(ciudad)) {
                             ciudadesDato.add(x);
                         }
                     }
-                    if(ciudadesDato.size() > 0){
-                        mensajeRespuesta =new Gson().toJson(ciudadesDato);
-                    }else{
-                     mensajeRespuesta = "Ciudad no encontrada";
+                    if (ciudadesDato.size() > 0) {
+                        mensajeRespuesta = new Gson().toJson(ciudadesDato);
+                    } else {
+                        mensajeRespuesta = "Ciudad no encontrada";
                     }
                 }
                 int puertoCliente = peticion.getPort();
